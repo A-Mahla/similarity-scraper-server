@@ -207,8 +207,11 @@ class ScraperGraph:
 
 
 if __name__ == "__main__":
-    tree = ScraperGraph("https://www.hcompany.ai/", is_image=False)
+    image = False
+    tree = ScraperGraph("https://www.hcompany.ai/", is_image=image)
     best_node = tree.find_best_node(tree.root)
     print(f"Best node tag: {best_node.name}")
-    print(f"Best node content: {best_node.data.get_text(strip=True)}")
-    print(f"Best node content: {best_node.data}")
+    if not image:
+        print(f"Best node content: {best_node.data.get_text(strip=True)}")
+    else:
+        print(f"Best node content: {best_node.data}")
