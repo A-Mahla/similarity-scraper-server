@@ -1,8 +1,7 @@
 import logging
 import os
 from beanie import init_beanie
-from models.sample_model import ChatSample
-from models.trainer_model import TrainerManager
+from models.sample_model import Sample
 from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import MongoClient
 
@@ -14,7 +13,7 @@ async def instantiate_database():
     await init_beanie(
         database=client[os.environ["MONGO_INITDB_DATABASE"]],
         document_models=[
-            ChatSample,
+            Sample,
         ],
     )
 

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, status, Body, Query
 from models.sample_model import (
-    ChatSample,
-    ChatSampleRequest,
-    ChatSampleResponse,
+    Sample,
+    SampleRequest,
+    SampleResponse,
     SamplesResponse,
     DeleteSamplesResponse,
     ExtendedSampleType,
@@ -15,44 +15,47 @@ router = APIRouter()
 logger = logging.getLogger("uvicorn")
 
 
-# curl -X POST "http://yourdomain.com/sample/" \
-#      -H "Content-Type: application/json" \
-#      -d '{
-#          "prompt": "Example prompt",
-#          "output": "Example response",
-#          "label": true,
-#          "type": "training" # default is "unused"
-#     }'
+# curl -X POST http://localhost/api/sample \
+# -H "Content-Type: application/json" \
+# -d '{
+#     "metadata": {
+#         "url": "https://www.exampletextpage.com",
+#         "tag": "<p>",
+#         "language": "en",
+#         "type": "text",
+#         "content": "This is a sample text content for the labeled dataset."
+#     }
+# }'
 @router.post(
     "/",
-    response_description="Add a new sample to the labeled dataset",
+    response_description="Add a new sample",
     status_code=status.HTTP_201_CREATED,
-    response_model=ChatSampleResponse,
+    response_model=SampleResponse,
 )
 async def add_sample_labeled(
-    sample: ChatSampleRequest = Body(...),
-) -> ChatSampleResponse:
+    sample: SampleRequest = Body(...),
+) -> SampleResponse:
     logger.info(f"Adding sample: {sample}")
-    return await SampleService.add_sample(ChatSample(**sample.model_dump()))
+    return await SampleService.add_sample(Sample(**sample.model_dump()))
 
 
-# curl -X DELETE "http://yourdomain.com/sample/?type=unused" -H "accept: application/json"
+# curl -X DELETE "http://localhost/api/sample/?type=text" -H "accept: application/json"
 @router.delete(
     "/",
-    response_description="Delete all training samples",
+    response_description="Delete samples",
     status_code=status.HTTP_200_OK,
     response_model=DeleteSamplesResponse,
 )
 async def delete_training_samples(
     type: ExtendedSampleType = Query(...),
 ) -> DeleteSamplesResponse:
-    return await SampleService.delete_training_sample(type)
+    return await SampleService.delete_sample_by_type(type)
 
 
-# curl -X GET "http://yourdomain.com/sample/?type=unused" -H "accept: application/json"
+# curl -X GET "http://localhost/api/?type=text" -H "accept: application/json"
 @router.get(
     "/",
-    response_description="Get all samples",
+    response_description="Get samples",
     status_code=status.HTTP_200_OK,
     response_model=SamplesResponse,
 )

@@ -1,12 +1,11 @@
 from beanie import Document, PydanticObjectId
+from models.scraper_model import ScraperMetaData, ScraperType
 from pydantic import BaseModel, Field
 from typing import Union
 from enum import Enum
 
 
-class SampleType(str, Enum):
-    USED = "used"
-    TRAINING = "training"
+SampleType = ScraperType
 
 
 class GroupSampleType(str, Enum):
@@ -16,44 +15,27 @@ class GroupSampleType(str, Enum):
 ExtendedSampleType = Union[SampleType, GroupSampleType]
 
 
-class ChatSampleRequest(BaseModel):
-    prompt: str = Field(..., description="The prompt given to the model")
-    output: str = Field(..., description="The output from the model")
-    label: bool = Field(..., description="The label of the sample")
-    type: SampleType = Field(
-        SampleType.TRAINING,
-        description="Whether the sample has been used for training actual model or not",
-    )
+class SampleRequest(BaseModel):
+    metadata: ScraperMetaData = Field(..., description="The metadata of the sample")
 
 
-class ChatSample(Document):
+class Sample(Document):
     id: PydanticObjectId = Field(
         default_factory=PydanticObjectId,
         alias="_id",
     )
-    prompt: str = Field(..., description="The prompt given to the model")
-    output: str = Field(..., description="The output from the model")
-    label: bool = Field(..., description="The label of the sample")
-    type: SampleType = Field(
-        SampleType.TRAINING,
-        description="Whether the sample has been used for training actual model or not",
-    )
+    metadata: ScraperMetaData = Field(..., description="The metadata of the sample")
 
     class Settings:
-        collection = "chat_samples"
+        collection = "http_samples"
 
     class ConfigDict:
-        json_encoders = {
-            PydanticObjectId: str  # Ensures ObjectId is converted to string when serializing to JSON
-        }
+        json_encoders = {PydanticObjectId: str}
 
 
-class ChatSampleResponse(BaseModel):
-    id: str = Field(..., description="The unique identifier for the chat sample")
-    prompt: str = Field(..., description="The prompt given to the model")
-    output: str = Field(..., description="The output from the model")
-    label: bool = Field(..., description="The label of the sample")
-    type: SampleType = Field(..., description="Usage status of the sample")
+class SampleResponse(BaseModel):
+    id: str = Field(..., description="The unique identifier for the http sample")
+    metadata: ScraperMetaData = Field(..., description="The metadata of the sample")
     message: str = Field(
         default="Sample created successfully",
         description="A message about the result of the operation",
@@ -61,14 +43,22 @@ class ChatSampleResponse(BaseModel):
 
 
 class SamplesResponse(BaseModel):
-    samples: list[ChatSample] = Field(..., description="A list of chat samples")
+    samples: list[Sample] = Field(..., description="A list of http samples")
     message: str = Field(
         default="Samples retrieved successfully",
         description="A message about the result of the operation",
     )
 
 
+class DeleteUniqueSampleResponse(BaseModel):
+    message: str = Field(
+        default="Samples deleted successfully",
+        description="A message about the result of the operation",
+    )
+
+
 class DeleteSamplesResponse(BaseModel):
+    count: int = Field(..., description="The number of samples deleted")
     message: str = Field(
         default="Samples deleted successfully",
         description="A message about the result of the operation",
