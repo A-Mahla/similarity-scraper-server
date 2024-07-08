@@ -1,17 +1,17 @@
+
+# This docker-compose file is used as CI/CD pipeline to build and run the services in the docker container.
+
 services:
 
-<<<<<<< HEAD
   frontend:
     build:
-      context: ../../app/frontend/.
+      context: ./ci_proxy/.
     ports:
       - "80:80"
     restart: always
     networks:
       - local_network
 
-=======
->>>>>>> cf5c8d3c0425b6bd7abf78c0099d93a113749d1a
   mongodb:
     image: mongo:latest
     restart: always
