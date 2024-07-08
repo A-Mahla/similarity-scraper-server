@@ -26,7 +26,6 @@ services:
     build:
       context: ../../app/api/.
     depends_on:
-      - multi2vec-clip
       - mongodb
     expose:
       - "5678"
