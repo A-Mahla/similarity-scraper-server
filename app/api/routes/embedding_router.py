@@ -19,7 +19,3 @@ logger = logging.getLogger("uvicorn")
 )
 async def get_embeddings(type: SampleType = Query(...)) -> EmbeddingResponse:
     return await EmbeddingService.delete_duplicate_embedding_samples(type)
-
-
-# async def get_embeddings(type: ExtendedSampleType = Query(...)) -> SamplesResponse:
-#     return await SampleService.get_samples(type)

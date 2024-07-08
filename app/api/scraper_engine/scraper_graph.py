@@ -56,6 +56,9 @@ class ScraperGraph:
     class NoFound(ValueError):
         pass
 
+    def __init__(self):
+        raise NotImplementedError("Use 'create()' method to instantiate the class.")
+
     @classmethod
     async def create(
         cls,

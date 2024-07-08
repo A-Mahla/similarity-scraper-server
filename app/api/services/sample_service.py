@@ -42,15 +42,6 @@ class SampleService:
     @staticmethod
     async def delete_sample_by_type(type: ExtendedSampleType) -> DeleteSamplesResponse:
         try:
-            if (
-                type in SampleType.__members__.values()
-                or type in GroupSampleType.__members__.values()
-            ):
-                raise ValueError(
-                    f"The type '{type.value}' is intentionally disabled to prevent accidental deletion. "
-                    "Please comment out this line to proceed."
-                )
-
             if isinstance(type, GroupSampleType):
                 if type.value == "all":
                     result = await Sample.find().delete_many()
@@ -63,7 +54,7 @@ class SampleService:
             else:
                 result = await Sample.find(Sample.metadata.type == type).delete_many()
                 count = result.deleted_count if result is not None else 0
-                message = f"{count} samples of type '{type}' deleted successfully"
+                message = f"{count} samples of type '{type.value}' deleted successfully"
             return DeleteSamplesResponse(count=count, message=message)
         except Exception:
             logger.error("Failed to delete training samples: ", exc_info=True)

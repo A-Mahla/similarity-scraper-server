@@ -67,19 +67,21 @@ class EmbeddingService:
     async def delete_duplicate_samples(
         similarity: List[Tuple[Sample, Sample, list[float]]]
     ) -> set[Tuple[Sample, list[float]]]:
-        deleted = set()
+        deleted_ids = set()
+        deleted_samples = set()
         for i, j, vector_j in similarity:
-            if i.id not in deleted and j.id not in deleted:
+            if i.id not in deleted_ids and j.id not in deleted_ids:
                 try:
                     await SampleService.delete_sample_by_id(j.id)
-                    deleted.add((j, vector_j))
+                    deleted_ids.add(j.id)
+                    deleted_samples.add((j, vector_j))
                 except Exception:
                     logger.error(
                         f"Failed to delete duplicate samples with id : {j.id}",
                         exc_info=True,
                     )
 
-        return deleted
+        return deleted_samples
 
     @staticmethod
     async def delete_duplicate_embedding_samples(

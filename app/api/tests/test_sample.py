@@ -2,34 +2,34 @@ import pytest
 
 
 @pytest.mark.asyncio
-async def test_add_sample_labeled(async_client):
-    sample_data = {
-        "prompt": "Example prompt",
-        "output": "Example response",
-        "label": True,
-        "type": "unused",
-    }
-    # Now using the async_client directly
-    response = await async_client.post("/sample/", json=sample_data)
+async def test_add_sample(async_client):
+    response = await async_client.post(
+        "/sample/",
+        json={
+            "metadata": {
+                "url": "https://www.exampletextpage.com",
+                "tag": "<p>",
+                "language": "en",
+                "type": "text",
+                "content": "This is a sample text content for the labeled dataset.",
+            }
+        },
+    )
     assert response.status_code == 201
-    data = response.json()
-    assert data["prompt"] == sample_data["prompt"]
-    assert data["output"] == sample_data["output"]
-    assert data["label"] == sample_data["label"]
-    assert data["type"] == sample_data["type"]
+    assert response.json()["message"] == "Sample created successfully"
 
 
 @pytest.mark.asyncio
 async def test_get_samples(async_client):
-    response = await async_client.get("/sample/?type=training")
+    response = await async_client.get("sample/?type=text")
     assert response.status_code == 200
-    data = response.json()
-    assert isinstance(data["samples"], list)
+    assert response.json()["message"] == "Samples retrieved successfully"
+    assert isinstance(response.json()["samples"], list)
 
 
 @pytest.mark.asyncio
-async def test_delete_training_samples(async_client):
-    response = await async_client.delete("/sample/?type=training")
+async def test_delete_samples(async_client):
+    response = await async_client.delete("sample/?type=text")
     assert response.status_code == 200
-    data = response.json()
-    assert "deleted successfully" in data["message"]
+    assert response.json()["message"] == "1 samples of type 'text' deleted successfully"
+    assert "count" in response.json()
