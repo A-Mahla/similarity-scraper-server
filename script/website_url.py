@@ -14,8 +14,11 @@ website_url = [
         "image_search": False,
     },
     {"url": "https://en.wikipedia.org/wiki/Charlie_Parker", "image_search": False},
+    {"url": "https://arxiv.org/abs/2206.11795", "image_search": False},
     {
-        "url": "https://en.wikipedia.org/wiki/Monarchy_of_the_United_Kingdom",
+        "url": "https://en.wikipedia.org/wiki/Charles_III",
         "image_search": True,
     },
+    {"url": "https://en.wikipedia.org/wiki/RoboCop", "image_search": True},
+    {"url": "https://en.wikipedia.org/wiki/Sonny_Rollins", "image_search": True},
 ]
