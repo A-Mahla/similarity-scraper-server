@@ -10,14 +10,14 @@ router = APIRouter()
 logger = logging.getLogger("uvicorn")
 
 
-# curl -X POST "http://localhost/api/scraper/" \
+# curl -X POST "http://localhost/api/scraper" \
 #      -H "Content-Type: application/json" \
 #      -d '{
 #          "url": "https://www.hcompany.ai/",
-#          "image_search": false,
+#          "image_search": false
 #     }'
 @router.post(
-    "/",
+    "",
     response_description="Scrape a webpage to get the best text",
     status_code=status.HTTP_201_CREATED,
     response_model=ScraperResponse,

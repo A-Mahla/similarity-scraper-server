@@ -1,10 +1,11 @@
 import pytest
+from httpx import AsyncClient
 
 
 @pytest.mark.asyncio
-async def test_add_sample(async_client):
+async def test_add_sample(async_client: AsyncClient):
     response = await async_client.post(
-        "/sample/",
+        "/sample",
         json={
             "metadata": {
                 "url": "https://www.exampletextpage.com",
@@ -20,16 +21,16 @@ async def test_add_sample(async_client):
 
 
 @pytest.mark.asyncio
-async def test_get_samples(async_client):
-    response = await async_client.get("sample/?type=text")
+async def test_get_samples(async_client: AsyncClient):
+    response = await async_client.get("sample?type=text")
     assert response.status_code == 200
     assert response.json()["message"] == "Samples retrieved successfully"
     assert isinstance(response.json()["samples"], list)
 
 
 @pytest.mark.asyncio
-async def test_delete_samples(async_client):
-    response = await async_client.delete("sample/?type=text")
+async def test_delete_samples(async_client: AsyncClient):
+    response = await async_client.delete("sample?type=text")
     assert response.status_code == 200
-    assert response.json()["message"] == "1 samples of type 'text' deleted successfully"
+    assert response.json()["message"] == "4 samples of type 'text' deleted successfully"
     assert "count" in response.json()

@@ -15,7 +15,7 @@ router = APIRouter()
 logger = logging.getLogger("uvicorn")
 
 
-# curl -X POST http://localhost/api/sample \
+# curl -X POST http://localhost/api/sample/ \
 # -H "Content-Type: application/json" \
 # -d '{
 #     "metadata": {
@@ -27,7 +27,7 @@ logger = logging.getLogger("uvicorn")
 #     }
 # }'
 @router.post(
-    "/",
+    "",
     response_description="Add a new sample",
     status_code=status.HTTP_201_CREATED,
     response_model=SampleResponse,
@@ -39,9 +39,9 @@ async def add_sample_labeled(
     return await SampleService.add_sample(Sample(**sample.model_dump()))
 
 
-# curl -X DELETE "http://localhost/api/sample/?type=text" -H "accept: application/json"
+# curl -X DELETE "http://localhost/api/sample?type=text" -H "accept: application/json"
 @router.delete(
-    "/",
+    "",
     response_description="Delete samples",
     status_code=status.HTTP_200_OK,
     response_model=DeleteSamplesResponse,
@@ -52,9 +52,9 @@ async def delete_training_samples(
     return await SampleService.delete_sample_by_type(type)
 
 
-# curl -X GET "http://localhost/api/?type=text" -H "accept: application/json"
+# curl -X GET "http://localhost/api/sample?type=text" -H "accept: application/json"
 @router.get(
-    "/",
+    "",
     response_description="Get samples",
     status_code=status.HTTP_200_OK,
     response_model=SamplesResponse,

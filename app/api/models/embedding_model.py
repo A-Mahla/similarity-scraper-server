@@ -10,12 +10,12 @@ class EmbeddingSampleType(str, Enum):
 
 
 class EmbeddingSample(BaseModel):
-    vectors: List[float] = Field(..., title="List of vectors")
     sample: Sample = Field(..., title="Sample metadata")
+    vectors: List[float] = Field(..., title="List of vectors")
 
 
 class EmbeddingResponse(BaseModel):
-    embedding_samples: List[EmbeddingSample] = Field(
+    samples_deleted: List[EmbeddingSample] = Field(
         ..., title="Embedding sample metadata"
     )
     status: Literal["success", "failed"] = Field(

@@ -2,6 +2,10 @@ from enum import Enum
 
 
 class LanguageSupported(str, Enum):
+    """
+    Language supported by the scraper engine and the tranformers embedding model
+    """
+
     AR = "ar"
     BG = "bg"
     CA = "ca"

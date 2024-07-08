@@ -20,6 +20,9 @@ class ScraperService:
         image_search: bool,
         language: LanguageSupported = LanguageSupported.EN,
     ) -> ScraperMetaData:
+        """
+        Builds a scraper graph and returns the best node from the graph.
+        """
 
         tree = await ScraperGraph.create(
             url, image_search=image_search, language=language
@@ -28,7 +31,7 @@ class ScraperService:
         content = (
             best_node.img_metadata.img_base64
             if best_node.img_metadata
-            else best_node.data.get_text(strip=True)
+            else best_node.data.get_text(" ").strip()
         )
         return ScraperMetaData(
             url=url,
@@ -45,6 +48,9 @@ class ScraperService:
         image_search: bool,
         language: LanguageSupported = LanguageSupported.EN,
     ) -> ScraperResponse:
+        """
+        Get the best text content from the page.
+        """
 
         try:
             metadata = await ScraperService.scraper_search(

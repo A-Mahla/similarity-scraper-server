@@ -10,12 +10,20 @@ import base64
 
 
 class ImageProcessorMetaData(BaseModel):
+    """
+    Image metadata
+    """
+
     url: str = Field(..., title="Url of the image")
     img_base64: str = Field(..., title="Base64 encoded image")
     size: Tuple[int, int] = Field(..., title="Size of the image")
 
 
 class ImageProcessor:
+    """
+    Processes images from the web
+    """
+
     def __init__(self, base_url: str):
         self.base_url = base_url
 

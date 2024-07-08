@@ -2,6 +2,7 @@ from fastapi import HTTPException
 from models.embedding_model import EmbeddingResponse, EmbeddingSample
 from models.sample_model import SampleType, SamplesResponse, Sample
 from services.sample_service import SampleService
+import torch.nn.functional as F
 import torch
 from typing import Tuple, List
 import httpx
@@ -19,6 +20,9 @@ class EmbeddingService:
     async def get_embeddings(
         type: SampleType,
     ) -> Tuple[list[list[float]], SamplesResponse]:
+        """
+        Retrieve embeddings for the given sample text or image content
+        """
 
         try:
             data = await SampleService.get_samples(type)
@@ -50,10 +54,14 @@ class EmbeddingService:
     def compute_similarity(
         vectors: list[list[float]], samples: list[Sample]
     ) -> List[Tuple[Sample, Sample, list[float]]]:
+        """
+        Compute similarity between embeddings and return similar samples.
+        """
 
         embeddings = torch.tensor(vectors, dtype=torch.float32)
+        embeddings = F.normalize(embeddings)
         similarity_matrix = torch.mm(embeddings, embeddings.T)
-        threshold = 0.85
+        threshold = 0.95
 
         similarity = []
         for i in range(embeddings.size(0)):
@@ -64,17 +72,20 @@ class EmbeddingService:
         return similarity
 
     @staticmethod
-    async def delete_duplicate_samples(
+    async def delete_near_duplicate_samples(
         similarity: List[Tuple[Sample, Sample, list[float]]]
-    ) -> set[Tuple[Sample, list[float]]]:
+    ) -> List[Tuple[Sample, list[float]]]:
+        """
+        Delete 'near-duplicate' samples based on similarity.
+        """
         deleted_ids = set()
-        deleted_samples = set()
+        deleted_samples = []
         for i, j, vector_j in similarity:
             if i.id not in deleted_ids and j.id not in deleted_ids:
                 try:
                     await SampleService.delete_sample_by_id(j.id)
                     deleted_ids.add(j.id)
-                    deleted_samples.add((j, vector_j))
+                    deleted_samples.append((j, vector_j))
                 except Exception:
                     logger.error(
                         f"Failed to delete duplicate samples with id : {j.id}",
@@ -97,14 +108,18 @@ class EmbeddingService:
         similar_embedding_samples = EmbeddingService.compute_similarity(
             vectors, data.samples
         )
-        embedding_deleted = await EmbeddingService.delete_duplicate_samples(
+        embedding_deleted = await EmbeddingService.delete_near_duplicate_samples(
             similar_embedding_samples
         )
 
         return EmbeddingResponse(
-            embedding_samples=[
-                EmbeddingSample(vectors=v, sample=s) for s, v in embedding_deleted
+            samples_deleted=[
+                EmbeddingSample(sample=s, vectors=v) for s, v in embedding_deleted
             ],
             status="success",
-            message="Similar embeddings are deleted successfully",
+            message=(
+                "Similar embeddings are deleted successfully"
+                if embedding_deleted
+                else "No similar embeddings found"
+            ),
         )

@@ -1,5 +1,4 @@
 from fastapi import APIRouter, status, Query
-from pydantic import HttpUrl
 from models.embedding_model import EmbeddingResponse
 from models.sample_model import SampleType
 from services.embedding_service import EmbeddingService
@@ -10,7 +9,7 @@ router = APIRouter()
 logger = logging.getLogger("uvicorn")
 
 
-# curl -X GET "http://yourdomain.com/embedding/unique?type=text" -H "accept: application/json"
+# curl -X GET "http://localhost/api/embedding/unique?type=text" -H "accept: application/json"
 @router.get(
     "/unique",
     response_description="Get all embeddings",

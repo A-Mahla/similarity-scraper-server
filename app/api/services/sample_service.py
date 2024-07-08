@@ -6,7 +6,6 @@ from models.sample_model import (
     DeleteSamplesResponse,
     ExtendedSampleType,
     GroupSampleType,
-    SampleType,
     DeleteUniqueSampleResponse,
 )
 import logging

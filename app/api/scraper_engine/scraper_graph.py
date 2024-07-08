@@ -10,6 +10,8 @@ from scraper_engine.language_supported import LanguageSupported
 
 
 class Node(NodeMixin):
+    """Node class for the scraper graph"""
+
     def __init__(
         self,
         name: str,
@@ -28,6 +30,53 @@ class Node(NodeMixin):
 
 
 class ScraperGraph:
+    """
+    ScraperGraph is used to build a tree structure of the HTML content of a webpage and
+    find the best node based on certain scoring criteria. This class employs approximate
+    tree pattern matching to efficiently extract relevant information from the HTML document.
+
+    Attributes:
+        language (LanguageSupported): The language supported for scraping.
+        website (Website): An instance of the Website class representing the target webpage.
+        img_proc (ImageProcessor): An instance of ImageProcessor for processing image metadata.
+        soup (BeautifulSoup): The BeautifulSoup object containing the parsed HTML content.
+        image_search (bool): A flag indicating whether to search for images.
+        root (Node): The root node of the constructed tree.
+        best_node (Node): The node with the highest score in the tree.
+
+    Relevant Text Tags:
+        A list of HTML tags considered relevant for text extraction.
+        - "h1", "h2", "h3", "h4", "h5", "h6"
+        - "article", "section", "p", "blockquote", "li", "td", "th"
+
+
+    Methods:
+        create(url: HttpUrl, image_search: bool = False, language: LanguageSupported = LanguageSupported.EN):
+            Class method to initialize the ScraperGraph instance by fetching and parsing the webpage content.
+
+        build_tree(element: Union[Tag, NavigableString], parent: Optional[Node] = None, depth: int = 0, best_node: Optional[Node] = None) -> Tuple[Node, Node]:
+            Recursively builds the tree structure from the HTML content, scoring nodes and tracking the best node.
+
+        is_language(text: str) -> bool:
+            Checks if the provided text is in the desired language.
+
+        calculate_text_density(node: Node) -> int:
+            Calculates the density of text within a node.
+
+        text_score(node: Node, node_name: str) -> int:
+            Scores a node based on its text content and tag.
+
+        image_score(node: Node) -> float:
+            scores a node based on its image attributes.
+
+        get_best_node() -> Node:
+            Retrieves the best node found in the tree based on the highest score.
+
+    Usage:
+        scraper_graph = await ScraperGraph.create(url="https://localhost/api/scaper/", image_search=False, language=LanguageSupported.EN)
+        best_node = scraper_graph.get_best_node()
+        print("Best Node:", best_node.name, best_node.data)
+    """
 
     language: LanguageSupported
     website: Website
@@ -58,6 +107,12 @@ class ScraperGraph:
 
     def __init__(self):
         raise NotImplementedError("Use 'create()' method to instantiate the class.")
+
+    def __await__(self):
+        async def dummy():
+            return self
+
+        return dummy().__await__()
 
     @classmethod
     async def create(
@@ -127,7 +182,7 @@ class ScraperGraph:
             return False
 
     def calculate_text_density(self, node: Node) -> int:
-        text = node.data.get_text(" ", strip=True) if node.data else ""
+        text = node.data.get_text(" ").strip() if node.data else ""
         return len(text) if self.is_language(text) else -1
 
     def text_score(self, node: Node, node_name: str) -> int:
