@@ -36,8 +36,8 @@ services:
     depends_on:
       - multi2vec-clip
       - mongodb
-    expose:
-      - "5678"
+    ports:
+      - "5678:5678"
     volumes:
       - ./app/api:/app
     command: uvicorn app:app --host 0.0.0.0 --port 5678 --reload --workers 5 
