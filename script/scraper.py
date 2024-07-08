@@ -23,7 +23,7 @@ def scrape_and_process(url_item: dict[str, bool], md_file: TextIOWrapper):
         md_file.write(f"### URL: {data['metadata']['url']}\n")
         md_file.write(f"**Content:** {data['metadata']['content']}\n\n")
 
-    md_file.write(f"---\n")
+    md_file.write("---\n")
 
     print(f"Scraped: {data['metadata']['url']}")
 
