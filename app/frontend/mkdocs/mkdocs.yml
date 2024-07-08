@@ -1,0 +1,9 @@
+site_name: Similarity Scraper Engine
+
+nav:
+  - Home: index.md
+  - Introduction: introduction.md
+  - API Reference: reference.md
+
+theme:
+  name: material
