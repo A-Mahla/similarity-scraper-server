@@ -26,12 +26,12 @@ jobs:
           echo MONGO_URL=${{ secrets.MONGO_URL }} >> .env
           echo CLIP_INFERENCE_API=${{ secrets.CLIP_INFERENCE_API }} >> .env
       - name: Build the stack
-        run: docker compose -f workflows-fastapi-1 up --build -d
+        run: docker compose -f .github/workflows/docker-compose.ci.yml up --build -d
       - name: Run tests on backend
         run: |
           sleep 30
           docker ps
-          docker exec similarity-scraper-server-fastapi-1 pytest tests/test_sample.py tests/test_scraper.py --color=yes --disable-warnings
+          docker exec workflows-fastapi-1 pytest tests/test_sample.py tests/test_scraper.py --color=yes --disable-warnings
       - name: Stop containers
         # the containers should be stopped regardless of
         # the test result
