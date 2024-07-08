@@ -105,6 +105,12 @@ class EmbeddingService:
                 status_code=400,
                 detail="Number of vectors and samples do not match.",
             )
+
+        if not vectors:
+            return EmbeddingResponse(
+                samples_deleted=[], status="success", message="No samples found"
+            )
+
         similar_embedding_samples = EmbeddingService.compute_similarity(
             vectors, data.samples
         )

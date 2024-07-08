@@ -40,11 +40,11 @@ async def test_get_embeddings(async_client: AsyncClient):
     assert response.status_code == status.HTTP_200_OK
     response_data = response.json()
 
-    assert "embedding_samples" in response_data
+    assert "samples_deleted" in response_data
     assert response_data["status"] == "success"
     assert response_data["message"] == "Similar embeddings are deleted successfully"
-    assert len(response_data["embedding_samples"]) == 1
+    assert len(response_data["samples_deleted"]) == 1
 
-    for sample in response_data["embedding_samples"]:
+    for sample in response_data["samples_deleted"]:
         assert "vectors" in sample
         assert "sample" in sample

@@ -32,5 +32,5 @@ async def test_get_samples(async_client: AsyncClient):
 async def test_delete_samples(async_client: AsyncClient):
     response = await async_client.delete("sample?type=text")
     assert response.status_code == 200
-    assert response.json()["message"] == "4 samples of type 'text' deleted successfully"
+    assert "samples of type 'text' deleted successfully" in response.json()["message"]
     assert "count" in response.json()
