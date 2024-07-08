@@ -41,10 +41,11 @@ curl -X POST "http://localhost/api/scraper" \
 {
   "metadata": {
     "url": "https://www.example.com/",
+    "image_url": null,
     "tag": "<p>",
     "language": "en",
     "type": "text",
-    "content": "Extracted main content of the page."
+    "content": "Extracted main content of the page." # or image in base64
   },
   "status": "success",
   "message": "Text content was successfully extracted from the page.",
