@@ -1,21 +1,12 @@
 services:
 
-  frontend:
-    build:
-      context: app/frontend/.
-    ports:
-      - "80:80"
-    restart: always
-    networks:
-      - local_network
-
   mongodb:
     image: mongo:latest
     restart: always
     expose:
       - "27017"
     env_file:
-      - .env
+      - ../../.env
     networks:
       - local_network
 
@@ -32,7 +23,7 @@ services:
 
   fastapi:
     build:
-      context: app/api/.
+      context: ../../app/api/.
     depends_on:
       - multi2vec-clip
       - mongodb
@@ -42,7 +33,7 @@ services:
       - ./app/api:/app
     command: uvicorn app:app --host 0.0.0.0 --port 5678 --reload --workers 5 
     env_file:
-      - .env
+      - ../../.env
     restart: always
     networks:
       - local_network
