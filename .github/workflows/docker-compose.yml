@@ -1,5 +1,6 @@
 services:
 
+<<<<<<< HEAD
   frontend:
     build:
       context: ../../app/frontend/.
@@ -9,13 +10,15 @@ services:
     networks:
       - local_network
 
+=======
+>>>>>>> cf5c8d3c0425b6bd7abf78c0099d93a113749d1a
   mongodb:
     image: mongo:latest
     restart: always
     expose:
       - "27017"
     env_file:
-      - .env
+      - ../../.env
     networks:
       - local_network
 
@@ -31,7 +34,7 @@ services:
       - ./app/api:/app
     command: uvicorn app:app --host 0.0.0.0 --port 5678 --reload --workers 5 
     env_file:
-      - .env
+      - ../../.env
     restart: always
     networks:
       - local_network
