@@ -14,7 +14,8 @@ The Similarity Scraper Engine is a tool designed to extract and manage text and 
 - **[FastAPI](https://fastapi.tiangolo.com/)**: For creating the REST API.
 - **[Nginx](https://nginx.org/)**: Used as a reverse proxy to FastAPI and serves frontend documentation.
 - **[MKDocs](https://www.mkdocs.org/)**: For creating project frontend documentation.
-- **[MongoDb](https://www.mongodb.com/)**: Database
+- **[MongoDB](https://www.mongodb.com/)**: Database
+- **[Docker Compose](https://docs.docker.com/compose/)**: containers management
 
 ## Getting Started
 
@@ -28,7 +29,7 @@ MONGO_INITDB_ROOT_USERNAME = "root_username"
 MONGO_INITDB_ROOT_PASSWORD = "password"
 MONGO_INITDB_DATABASE = "database_name"
 
-# Fine-tune server connection
+# api server env
 MONGO_URL = "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017" # keep it as is.
 
 # Multi Modal Model inference
@@ -60,7 +61,7 @@ This will start the services defined in your `docker-compose.yml` file, includin
 
 ### API Access
 
-- **Documentation**: Once Docker is up, access the API documentation at: [http://localhost](http://localhost)
+- **Documentation**: Once Docker is up, access the [API documentation](https://github.com/A-Mahla/similarity-scraper-server/blob/main/app/frontend/mkdocs/docs/reference.md) at: [http://localhost](http://localhost)
 - **API Base URL**: [http://localhost/api](http://localhost/api)
 
 ### Example Usage
