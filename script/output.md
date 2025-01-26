@@ -1,7 +1,3 @@
-### URL: https://www.hcompany.ai/
-**Content:** H  is  working on frontier action models,  to boost the productivity of workers Outrageous AI capabilities for task automation & decision-making. Join us
-
----
 ### URL: https://en.wikipedia.org/wiki/Celestine_(mineral)
 **Content:** Celestine  (the  IMA -accepted name) [6]  or  celestite [1] [7] [a]  is a  mineral  consisting of  strontium sulfate  ( Sr S O 4 ). The mineral is named for its occasional delicate  blue color . Celestine and the  carbonate  mineral  strontianite  are the principal sources of the  element   strontium , commonly used in  fireworks  and in various  metal alloys .
 
